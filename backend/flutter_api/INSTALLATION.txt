@@ -1,0 +1,131 @@
+===============================================
+INSTALLATION & SETUP GUIDE
+===============================================
+
+1. FOLDER STRUCTURE
+==================
+D:\UAS flutter 2025 IRMA\flutter_application_uas  <- Flutter project
+C:\xampp\htdocs\flutter_api                        <- PHP API endpoints
+
+2. DATABASE SETUP
+==================
+Metode 1: Otomatis via setup.php
+---------------------------------
+a) Buka browser: http://192.168.1.4/flutter_api/setup.php
+b) Tunggu sampai muncul JSON response dengan test credentials
+c) Database akan otomatis dibuat dengan sample data
+
+Metode 2: Manual import
+-----------------------
+a) Buka phpMyAdmin: http://localhost/phpmyadmin
+b) Import file: C:\xampp\htdocs\flutter_api\schema.sql
+c) Tunggu selesai
+d) Database flutter_uas sudah siap
+
+3. TEST CREDENTIALS
+===================
+Login dengan akun berikut (setelah setup):
+
+Admin:
+  Email: admin@gmail.com
+  Password: admin123
+  Role: admin
+
+Guru:
+  Email: guru1@school.com
+  Password: guru123
+  Role: guru
+
+Siswa:
+  Email: siswa1@school.com
+  Password: siswa123
+  Role: siswa
+
+4. FLUTTER APP CONFIGURATION
+============================
+File: D:\UAS flutter 2025 IRMA\flutter_application_uas\lib\services\auth_service.dart
+      D:\UAS flutter 2025 IRMA\flutter_application_uas\lib\services\firestore_service.dart
+
+BaseURL sudah dikonfigurasi untuk:
+  http://192.168.1.4/flutter_api
+
+Jika IP berbeda, update konstanta baseUrl di kedua file service.
+
+5. RUNNING THE APP
+==================
+a) Buka terminal di D:\UAS flutter 2025 IRMA\flutter_application_uas
+b) Jalankan:
+   flutter pub get
+   flutter run
+
+6. API ENDPOINTS SUMMARY
+========================
+Authentication:
+  POST /login.php          - Login user
+  POST /register.php       - Register user
+  GET  /get_user.php       - Get user data by UID
+  POST /create_user.php    - Create user (admin only)
+  POST /update_user.php    - Update user profile
+  POST /delete_user.php    - Delete user
+
+Nilai (Scores):
+  POST /nilai_add.php      - Add nilai
+  GET  /nilai_list.php     - Get nilai list for student
+  POST /nilai_update.php   - Update nilai
+  POST /nilai_delete.php   - Delete nilai
+
+Tugas (Assignments):
+  POST /tugas_add.php      - Add tugas
+  GET  /tugas_list.php     - Get all tugas
+  POST /tugas_delete.php   - Delete tugas
+
+Jadwal (Schedule):
+  POST /jadwal_add.php     - Add jadwal
+  GET  /jadwal_list.php    - Get jadwal list
+
+Kelas:
+  POST /kelas_add.php      - Add kelas
+  GET  /kelas_list.php     - Get kelas list
+
+Notifikasi:
+  POST /notifikasi_add.php           - Add notification
+  GET  /notifikasi_list.php          - Get notifications for user
+  POST /notifikasi_mark_read.php     - Mark as read
+
+Users List:
+  GET  /users_list.php     - Get users (optional filter by role)
+
+7. IMPORTANT NOTES
+==================
+- Ensure XAMPP is running (Apache + MySQL)
+- Device/Browser harus dalam jaringan yang sama (192.168.1.4)
+- Jika menggunakan emulator Android, ubah baseUrl ke 10.0.2.2 (host machine IP)
+- Password di test credentials harus diganti setelah deployment ke production
+- Semua endpoint return JSON format
+
+8. FIREBASE REMOVAL
+===================
+Paket Firebase masih ada di pubspec.yaml. Untuk benar-benar menghapus:
+
+a) Update pubspec.yaml:
+   Hapus dependency:
+   - firebase_core: ^3.0.0
+   - firebase_auth: ^5.1.0
+   - cloud_firestore: ^5.0.0
+   - firebase_storage: ^12.0.0
+
+b) Di file Dart, pastikan tidak ada import firebase
+
+c) Bersihkan iOS dan Android build:
+   flutter clean
+   flutter pub get
+
+d) Jalankan lagi:
+   flutter run
+
+9. TROUBLESHOOTING
+==================
+- API tidak dapat diakses: Periksa IP 192.168.1.4, pastikan XAMPP running
+- Database error: Pastikan MySQL user 'root' password benar di db.php
+- Login gagal: Cek test credentials, pastikan schema.sql sudah diimport
+- Flutter build error: Jalankan `flutter clean && flutter pub get`

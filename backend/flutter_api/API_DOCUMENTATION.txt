@@ -1,0 +1,500 @@
+===============================================
+FLUTTER UAS API DOCUMENTATION
+===============================================
+
+Base URL: http://192.168.1.4/flutter_api
+
+All responses are in JSON format:
+{
+  "success": 1 (or 0),
+  "data": {...},
+  "error": "error message (if success=0)"
+}
+
+===============================================
+AUTHENTICATION ENDPOINTS
+===============================================
+
+1. LOGIN
+--------
+POST /login.php
+
+Parameters:
+  - email (string, required)
+  - password (string, required)
+
+Response (success):
+{
+  "success": 1,
+  "user": {
+    "uid": "user_id",
+    "email": "user@example.com",
+    "username": "username",
+    "nama": "Full Name",
+    "role": "admin|guru|siswa"
+  }
+}
+
+Example:
+curl -X POST http://192.168.1.4/flutter_api/login.php \
+  -d "email=admin@gmail.com&password=admin123"
+
+
+2. REGISTER
+-----------
+POST /register.php
+
+Parameters:
+  - email (string, required)
+  - password (string, required)
+  - username (string, required)
+  - name (string, required)
+  - role (string, optional, default='siswa')
+
+Response (success):
+{
+  "success": 1,
+  "user": {
+    "uid": "generated_uid",
+    "email": "email",
+    "username": "username",
+    "name": "name",
+    "role": "role"
+  }
+}
+
+
+3. GET USER
+-----------
+GET /get_user.php?uid=user_id
+
+Response (success):
+{
+  "success": 1,
+  "user": {
+    "uid": "user_id",
+    "email": "email",
+    "username": "username",
+    "nama": "name",
+    "role": "role",
+    "kelas_id": null,
+    "wali_kelas_id": null
+  }
+}
+
+
+4. CREATE USER
+--------------
+POST /create_user.php
+
+Parameters:
+  - nama (string, required)
+  - email (string, required)
+  - password (string, optional)
+  - role (string, required)
+  - kelasId (integer, optional)
+  - waliKelasId (integer, optional)
+
+Response (success):
+{
+  "success": 1,
+  "user": {...}
+}
+
+
+5. UPDATE USER
+--------------
+POST /update_user.php
+
+Parameters:
+  - uid (string, required)
+  - nama (string, optional)
+  - email (string, optional)
+  - username (string, optional)
+  - kelasId (integer, optional)
+  - waliKelasId (integer, optional)
+
+Response (success):
+{
+  "success": 1
+}
+
+
+6. DELETE USER
+--------------
+POST /delete_user.php
+
+Parameters:
+  - uid (string, required)
+
+Response (success):
+{
+  "success": 1
+}
+
+
+7. LIST USERS
+-------------
+GET /users_list.php?role=siswa (optional)
+
+Response (success):
+{
+  "success": 1,
+  "data": [
+    {"uid": "...", "email": "...", ...},
+    ...
+  ]
+}
+
+===============================================
+NILAI (SCORES) ENDPOINTS
+===============================================
+
+1. ADD NILAI
+-----------
+POST /nilai_add.php
+
+Parameters:
+  - siswaId (string, required)
+  - mapelId (string, required)
+  - nilai (double, required)
+  - semester (string, optional)
+
+Response (success):
+{
+  "success": 1
+}
+
+
+2. GET NILAI LIST
+-----------------
+GET /nilai_list.php?siswaId=student_id
+
+Response (success):
+{
+  "success": 1,
+  "data": [
+    {
+      "id": "1",
+      "siswa_id": "siswa001",
+      "mapel_id": "mapel001",
+      "nilai": 85.5,
+      "semester": "Ganjil",
+      "created_at": "2024-01-01 10:00:00"
+    },
+    ...
+  ]
+}
+
+
+3. UPDATE NILAI
+---------------
+POST /nilai_update.php
+
+Parameters:
+  - id (integer, required)
+  - nilai (double, required)
+
+Response (success):
+{
+  "success": 1
+}
+
+
+4. DELETE NILAI
+---------------
+POST /nilai_delete.php
+
+Parameters:
+  - id (integer, required)
+
+Response (success):
+{
+  "success": 1
+}
+
+===============================================
+TUGAS (ASSIGNMENTS) ENDPOINTS
+===============================================
+
+1. ADD TUGAS
+-----------
+POST /tugas_add.php
+
+Parameters:
+  - guruId (string, required)
+  - judul (string, required)
+  - deskripsi (string, optional)
+  - deadline (datetime, optional - format: YYYY-MM-DD HH:MM:SS)
+
+Response (success):
+{
+  "success": 1
+}
+
+
+2. GET TUGAS LIST
+-----------------
+GET /tugas_list.php
+
+Response (success):
+{
+  "success": 1,
+  "data": [
+    {
+      "id": "1",
+      "guru_id": "guru001",
+      "judul": "Latihan Soal",
+      "deskripsi": "...",
+      "deadline": "2024-01-15 23:59:59",
+      "created_at": "2024-01-01 10:00:00"
+    },
+    ...
+  ]
+}
+
+
+3. UPDATE TUGAS
+---------------
+POST /tugas_update.php
+
+Parameters:
+  - id (integer, required)
+  - judul (string, optional)
+  - deskripsi (string, optional)
+  - deadline (datetime, optional)
+  - guru_id (string, optional)
+
+Response (success):
+{
+  "success": 1
+}
+
+
+4. DELETE TUGAS
+---------------
+POST /tugas_delete.php
+
+Parameters:
+  - id (integer, required)
+
+Response (success):
+{
+  "success": 1
+}
+
+===============================================
+JADWAL (SCHEDULE) ENDPOINTS
+===============================================
+
+1. ADD JADWAL
+-----------
+POST /jadwal_add.php
+
+Parameters:
+  - hari (string, required - e.g., "Senin")
+  - mapel (string, required)
+  - kelasId (integer, optional)
+  - guruId (string, optional)
+  - jam (string, optional - e.g., "07:30-09:00")
+  - ruangan (string, optional)
+
+Response (success):
+{
+  "success": 1
+}
+
+
+2. GET JADWAL LIST
+------------------
+GET /jadwal_list.php
+
+Response (success):
+{
+  "success": 1,
+  "data": [
+    {
+      "id": "1",
+      "hari": "Senin",
+      "mapel": "Matematika",
+      "kelas_id": "1",
+      "guru_id": "guru001",
+      "jam": "07:30-09:00",
+      "ruangan": "Ruang 101"
+    },
+    ...
+  ]
+}
+
+
+3. UPDATE JADWAL
+----------------
+POST /jadwal_update.php
+
+Parameters:
+  - id (integer, required)
+  - hari (string, optional)
+  - mapel (string, optional)
+  - jam (string, optional)
+  - ruangan (string, optional)
+  - kelas_id (integer, optional)
+  - guru_id (string, optional)
+
+Response (success):
+{
+  "success": 1
+}
+
+
+4. DELETE JADWAL
+----------------
+POST /jadwal_delete.php
+
+Parameters:
+  - id (integer, required)
+
+Response (success):
+{
+  "success": 1
+}
+
+===============================================
+KELAS (CLASSES) ENDPOINTS
+===============================================
+
+1. ADD KELAS
+-----------
+POST /kelas_add.php
+
+Parameters:
+  - nama (string, required)
+
+Response (success):
+{
+  "success": 1
+}
+
+
+2. GET KELAS LIST
+-----------------
+GET /kelas_list.php
+
+Response (success):
+{
+  "success": 1,
+  "data": [
+    {
+      "id": "1",
+      "nama": "10 A"
+    },
+    ...
+  ]
+}
+
+
+3. UPDATE KELAS
+---------------
+POST /kelas_update.php
+
+Parameters:
+  - id (integer, required)
+  - nama (string, required)
+
+Response (success):
+{
+  "success": 1
+}
+
+
+4. DELETE KELAS
+---------------
+POST /kelas_delete.php
+
+Parameters:
+  - id (integer, required)
+
+Response (success):
+{
+  "success": 1
+}
+
+===============================================
+NOTIFIKASI (NOTIFICATIONS) ENDPOINTS
+===============================================
+
+1. ADD NOTIFIKASI
+-----------------
+POST /notifikasi_add.php
+
+Parameters:
+  - userId (string, required)
+  - judul (string, required)
+  - pesan (string, optional)
+
+Response (success):
+{
+  "success": 1
+}
+
+
+2. GET NOTIFIKASI LIST
+----------------------
+GET /notifikasi_list.php?userId=user_id
+
+Response (success):
+{
+  "success": 1,
+  "data": [
+    {
+      "id": "1",
+      "user_id": "siswa001",
+      "judul": "Notifikasi",
+      "pesan": "...",
+      "dibaca": 0,
+      "created_at": "2024-01-01 10:00:00"
+    },
+    ...
+  ]
+}
+
+
+3. MARK NOTIFIKASI AS READ
+---------------------------
+POST /notifikasi_mark_read.php
+
+Parameters:
+  - id (integer, required)
+
+Response (success):
+{
+  "success": 1
+}
+
+===============================================
+HEALTH CHECK
+===============================================
+
+GET /health.php
+
+Response (success):
+{
+  "success": 1,
+  "message": "API is running",
+  "database": "connected"
+}
+
+===============================================
+ERROR RESPONSES
+===============================================
+
+All errors return:
+{
+  "success": 0,
+  "error": "Error message describing what went wrong"
+}
+
+HTTP Status Codes:
+  200 - Success
+  400 - Bad request (missing parameters)
+  404 - Not found
+  500 - Server error (database connection, etc.)

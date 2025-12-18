@@ -1,0 +1,17 @@
+<IfModule mod_headers.c>
+    Header set Access-Control-Allow-Origin "*"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+    Header set Content-Type "application/json; charset=utf-8"
+</IfModule>
+
+<IfModule mod_authz_core.c>
+    Require all granted
+</IfModule>
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /flutter_api/
+</IfModule>

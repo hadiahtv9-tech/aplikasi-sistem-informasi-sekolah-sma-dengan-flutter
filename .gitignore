@@ -58,6 +58,7 @@ android/key.properties
 .idea/
 .vscode/
 .env
+backend/flutter_api/.env
 /.flutter-plugins
 /.flutter-plugins-dependencies
 pubspec.lock
